@@ -3,6 +3,12 @@ require 'whenever/capistrano/support'
 Capistrano::Configuration.instance(:must_exist).load do
   Whenever::CapistranoSupport.load_into(self)
 
+  def _cset(name, *args, &block)
+    unless exists?(name)
+      set(name, *args, &block)
+    end
+  end
+
   _cset(:whenever_roles)        { :db }
   _cset(:whenever_options)      { {:roles => fetch(:whenever_roles)} }
   _cset(:whenever_command)      { "whenever" }
